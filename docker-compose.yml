@@ -1,0 +1,25 @@
+version: '3'
+services:
+  php:
+    build: ./
+    container_name: test_activity
+    volumes:
+      - ./:/app:delegated
+    working_dir: /app/web
+    entrypoint: "php -S 0.0.0.0:80"
+  postgres:
+    image: postgres:13-alpine
+    container_name: ${DB_CONTAINER_NAME}
+    volumes:
+      - ./runtime/pg_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - 5432:5432
+
+networks:
+  default:
+    external:
+      name: activity_network
